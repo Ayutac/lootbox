@@ -1,5 +1,4 @@
 use std::cmp::Ordering;
-use crate::rng::Rng;
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq, Ord)]
 pub struct Currency {
@@ -18,11 +17,5 @@ impl PartialOrd for Currency {
         else {
             Some(self.name.cmp(&other.name))
         }
-    }
-}
-
-impl Currency {
-    fn generate(mut rng: Rng, rarity: u8) -> Self {
-        Currency { name: rng.generate_word(), rarity }
     }
 }

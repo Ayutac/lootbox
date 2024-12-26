@@ -1,5 +1,6 @@
 use rand::rngs::StdRng;
 use rand::{RngCore, SeedableRng};
+use crate::currency::Currency;
 use crate::sticker::Sticker;
 
 pub struct Rng {
@@ -24,6 +25,10 @@ impl Rng {
 
     pub fn generate_sticker(&mut self) -> Sticker {
         Sticker::new(self.rng.next_u64())
+    }
+
+    pub fn generate_currency(&mut self, rarity: u8) -> Currency {
+        Currency {name: self.generate_word(), rarity}
     }
 
 }

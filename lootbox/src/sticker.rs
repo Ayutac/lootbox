@@ -13,7 +13,7 @@ impl Sticker {
         let mut arr: [char; 72] = [' '; 72]; // 72 = 64 + 8 new lines
         for i in 0..8 {
             for j in 0..8 {
-                if (self.value & (1 << (i * 8 + j))) != 0 {
+                if self.value & (1 << (i * 8 + j)) != 0 {
                     arr[i * 9 + j] = '█';
                 }
             }
