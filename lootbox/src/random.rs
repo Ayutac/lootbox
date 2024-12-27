@@ -5,6 +5,7 @@ use crate::lootbox::{LootBox, LootEntry, LootTable};
 use crate::lootbox::LootEntry::{Money, Stickers};
 use crate::sticker::Sticker;
 
+#[derive(Clone, Debug)]
 pub struct Random {
     pub rng: StdRng
 }
