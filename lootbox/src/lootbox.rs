@@ -3,9 +3,9 @@ use std::fmt::{Debug, Display};
 use std::hash::Hash;
 use crate::currency::Currency;
 
-#[derive(Clone, PartialOrd, PartialEq, Eq, Hash, Ord)]
+#[derive(Clone, PartialOrd, PartialEq, Eq, Hash, Ord, Debug)]
 pub enum LootEntry {
-    Sticker(u32),
+    Stickers(u32),
     Money(Currency, u32)
 }
 
@@ -14,15 +14,20 @@ impl Display for LootEntry {
         if let LootEntry::Money(currency, amount) = self {
             write!(f, "{} {}", amount, currency)
         }
-        else if let LootEntry::Sticker(amount) = self {
-            write!(f, "{} sticker", amount)
+        else if let LootEntry::Stickers(amount) = self {
+            if *amount == 1 {
+                write!(f, "1 sticker")
+            }
+            else {
+                write!(f, "{} stickers", amount)
+            }
         }
         else { unreachable!() }
     }
 }
 
 #[derive(Eq)]
-pub struct LootTable(Vec<(LootEntry, u8)>);
+pub struct LootTable(Vec<(LootEntry, u16)>);
 
 impl Clone for LootTable {
     fn clone(&self) -> Self {
@@ -79,6 +84,10 @@ impl Hash for LootTable {
 }
 
 impl LootTable {
+    pub fn new(content: Vec<(LootEntry, u16)>) -> Self {
+        LootTable(content)
+    }
+
     pub fn size(&self) -> u32 {
         let mut size = 0u32;
         for (_, amount) in &self.0 {
@@ -98,7 +107,7 @@ impl LootTable {
                 return Some((*entry).clone());
             }
         }
-        return None;
+        None
     }
 }
 

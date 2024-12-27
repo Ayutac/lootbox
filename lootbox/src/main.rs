@@ -21,4 +21,11 @@ fn main() {
     let mut rng = Random::from_seed(1234567890u64);
     println!("{}", rng.generate_word());
     print!("{}", rng.generate_sticker().display());
+    let copper_box = rng.generate_loot_box(0, &currencies);
+    let silver_box = rng.generate_loot_box(1, &currencies);
+    let gold_box = rng.generate_loot_box(2, &currencies);
+    println!("{:?}", copper_box);
+    println!("{:?}", silver_box);
+    println!("{:?}", gold_box);
+    println!("{:?}", rng.generate_loot_box_loot(&gold_box));
 }
