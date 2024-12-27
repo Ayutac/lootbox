@@ -1,6 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use crate::currency::Currency;
 use crate::game::Game;
+use crate::lootbox::{LootBox, LootEntry};
 use crate::sticker::Sticker;
 
 #[derive(Clone, Debug, Default)]
@@ -54,6 +55,44 @@ impl Player {
             }
             else {
                 self.money.insert((*currency).clone(), overflow_check.0);
+            }
+        }
+    }
+
+    pub fn can_spend_money(&self, currency: &Currency, amount: u32) -> bool {
+        if !self.money.contains_key(currency) {
+            false
+        }
+        else {
+            self.money[currency] >= amount
+        }
+    }
+
+    pub fn spend_money(&mut self, currency: &Currency, amount: u32) {
+        if !self.can_spend_money(currency, amount) {
+            panic!("Can't spend {} {}", amount, currency);
+        }
+        self.money.insert((*currency).clone(), self.money[currency] - amount);
+    }
+
+    pub fn can_buy_loot_box(&self, loot_box: &LootBox) -> bool {
+        self.can_spend_money(&loot_box.price.0, loot_box.price.1)
+    }
+
+    pub fn buy_loot_box(&mut self, loot_box: &LootBox) {
+        self.spend_money(&loot_box.price.0, loot_box.price.1);
+        let mut loot = self.game.random.generate_loot_box_loot(loot_box);
+        for loot_entry in loot.iter() {
+            if let LootEntry::Money(currency, amount) = self {
+                self.add_money(currency, *amount);
+            }
+            else if let LootEntry::Stickers(amount) = loot_entry {
+                for _ in 0..*amount {
+                    self.add_sticker(self.game.random.generate_sticker());
+                }
+            }
+            else {
+                unreachable!();
             }
         }
     }
