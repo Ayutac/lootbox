@@ -20,7 +20,7 @@ fn main() {
     println!("{:?}", player);
     let mut rng = Random::from_seed(1234567890u64);
     println!("{}", rng.generate_word());
-    print!("{}", rng.generate_sticker().display());
+    print!("{}", rng.generate_sticker());
     let copper_box = rng.generate_loot_box(0, &currencies);
     let silver_box = rng.generate_loot_box(1, &currencies);
     let gold_box = rng.generate_loot_box(2, &currencies);
